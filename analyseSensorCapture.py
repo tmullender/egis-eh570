@@ -15,14 +15,17 @@ IMAGE_COUNT = 5
 IMAGE_SIZE = IMAGE_HEIGHT * IMAGE_WIDTH
 
 
+def split_data(input_data):
+    return input_data.split(":") if ":" in input_data else (input_data[i:i+2] for i in range(0, len(input_data), 2))
+
+
 class Message:
 
     def __init__(self, inum, isize, binbound, adata):
         self.num = inum
         self.size = isize
         self.inbound = binbound
-        self.command_string = adata.strip()[-8:]
-        self.data = list(map(lambda x: int(x, 16), adata.split(":")))
+        self.data = list(map(lambda x: int(x, 16), split_data(adata.strip())))
 
     def is_control(self):
         return self.data[0:5] == EGIS_CONTROL or (self.data[0:4] == SIGE and self.data[6] == 1)
