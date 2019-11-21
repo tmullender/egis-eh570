@@ -110,3 +110,4 @@ venv.bak/
 images/
 *.csv
 *.pcap*
+demo

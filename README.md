@@ -47,3 +47,8 @@ USB in frames are either 34 or 32539 bytes, which is 7 or 32512 after removing h
 + analyseSensorCapture.py -> loops through all the frames, prints all the unique requests and generates all the images as [Plain PGM](http://netpbm.sourceforge.net/doc/pgm.html)s
 + generatePGM.sh -> A crude script to generate a single PGM from a single frame to allow playing with image sizes
 
+## Demo
+
+`mkdir -p images && gcc demo.c -I /usr/include/libusb-1.0/ -l usb-1.0 -o demo -Wall && ./demo`
+
+If you have permission to access the device, this should generate 6 images from the scanner in the images directory
