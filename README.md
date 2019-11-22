@@ -1,5 +1,11 @@
 # EGIS Fingerprint Sensor EH570
 
+On an Acer Swift 3 `lsusb` lists the device as: 
+
+```
+1c7a:0570 LighTuning Technology Inc. EgisTec Touch Fingerprint Sensor
+```
+
 ## Method
 
 Based on Patrick Marlier's [example](http://pmarlier.free.fr/etes603.html)
@@ -44,7 +50,7 @@ USB in frames are either 34 or 32539 bytes, which is 7 or 32512 after removing h
 
 ## Scripts
 
-+ analyseSensorCapture.py -> loops through all the frames, prints all the unique requests and generates all the images as [Plain PGM](http://netpbm.sourceforge.net/doc/pgm.html)s
++ analyseSensorCapture.py -> loops through all the frames, prints all the unique requests and generates all the images as [Plain PGM](http://netpbm.sourceforge.net/doc/pgm.html)s and [BMP](https://en.wikipedia.org/wiki/BMP_file_format)s
 + generatePGM.sh -> A crude script to generate a single PGM from a single frame to allow playing with image sizes
 
 ## Demo
