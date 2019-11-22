@@ -13,6 +13,33 @@ IMAGE_WIDTH = 114
 IMAGE_HEIGHT = 57
 IMAGE_COUNT = 5
 IMAGE_SIZE = IMAGE_HEIGHT * IMAGE_WIDTH
+BMP_HEADER_SIZE = 54
+
+
+def create_header():
+    colour_table = bytes(0)
+    for c in range(256):
+        colour_table += bytearray([c, c, c, 0])
+    ct_length = len(colour_table)
+    header = 'BM'.encode() \
+            + (BMP_HEADER_SIZE + ct_length + 2*IMAGE_HEIGHT + IMAGE_SIZE).to_bytes(4, byteorder="little") \
+            + (0).to_bytes(4, byteorder="little") \
+            + (BMP_HEADER_SIZE + ct_length).to_bytes(4, byteorder="little") \
+            + (40).to_bytes(4, byteorder="little") \
+            + IMAGE_WIDTH.to_bytes(4, byteorder="little", signed=True) \
+            + IMAGE_HEIGHT.to_bytes(4, byteorder="little", signed=True) \
+            + (1).to_bytes(2, byteorder="little") \
+            + (8).to_bytes(2, byteorder="little") \
+            + (0).to_bytes(4, byteorder="little") \
+            + (0).to_bytes(4, byteorder="little") \
+            + (0).to_bytes(4, byteorder="little", signed=True) \
+            + (0).to_bytes(4, byteorder="little", signed=True) \
+            + (0).to_bytes(4, byteorder="little") \
+            + (0).to_bytes(4, byteorder="little")
+    return header + colour_table
+
+
+BMP_HEADER = create_header()
 
 
 def split_data(input_data):
@@ -41,12 +68,20 @@ class Message:
         if not os.path.exists(image_dir):
             os.mkdir(image_dir)
         for i in range(IMAGE_COUNT):
-            filename = os.path.join(image_dir, "%d.pgm" % i)
-            with open(filename, 'w') as writer:
+            pgm_filename = os.path.join(image_dir, "%d.pgm" % i)
+            img_data = self.data[i * IMAGE_SIZE:(i + 1) * IMAGE_SIZE]
+            with open(pgm_filename, 'w') as writer:
                 writer.write("P2\n%d %d\n255\n" % (IMAGE_WIDTH, IMAGE_HEIGHT))
-                image_data = list(map(lambda x: "% 3d" % x, self.data[i*IMAGE_SIZE:(i+1)*IMAGE_SIZE]))
+                image_data = list(map(lambda x: "% 3d" % x, img_data))
                 rows = (image_data[i:i + IMAGE_WIDTH] for i in range(0, IMAGE_SIZE, IMAGE_WIDTH))
                 writer.writelines(map(lambda y: "".join(y), rows))
+            bmp_filename = os.path.join(image_dir, "%d.bmp" % i)
+            with open(bmp_filename, 'wb') as writer:
+                writer.write(BMP_HEADER)
+                rows = reversed(list(img_data[i:i + IMAGE_WIDTH] for i in range(0, IMAGE_SIZE, IMAGE_WIDTH)))
+                for row in rows:
+                    writer.write(bytearray(row))
+                    writer.write((0).to_bytes(2, byteorder="little"))
 
 
 if __name__ == "__main__":
