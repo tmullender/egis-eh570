@@ -103,8 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# IDEA
+# IDEs
 .idea/
+.vscode/
 
 # Outputs
 images/
