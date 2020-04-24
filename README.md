@@ -14,7 +14,7 @@ Based on Patrick Marlier's [example](http://pmarlier.free.fr/etes603.html)
 + Extract fields into a CSV with tshark
   * `tshark -r <pcap> -T fields -e _ws.col.No. -e _ws.col.Info -e _ws.col.Length -eusb.capdata -Eseparator=,`
 + Analyse anyway you can...
-+ Integrate with [libfprint](https://fprint.freedesktop.org/libfprint-dev/index.html)
++ Integrate with [libfprint](https://gitlab.freedesktop.org/tjmullender/libfprint/-/tree/eh570)
 
 ## Requests
 
